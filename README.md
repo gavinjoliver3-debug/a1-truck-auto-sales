@@ -1,36 +1,30 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# A1 Truck & Auto Sales
 
-## Getting Started
+Website for A1 Truck & Auto Sales — used commercial trucks, 1400 N 9th St #10, Modesto, CA 95350 · (209) 857-0195.
 
-First, run the development server:
+Next.js (App Router) + Tailwind. Runs on sample inventory until Supabase is connected.
+
+## Run locally
 
 ```bash
+npm install
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Go live (Supabase + Vercel)
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+1. Create a Supabase project and run `supabase/schema.sql` in the SQL editor.
+2. Add trucks in the `trucks` table (Table Editor). Photos: upload to a public Storage bucket and paste the URL into `image_url`.
+3. Import this repo in Vercel and set `NEXT_PUBLIC_SUPABASE_URL` and `NEXT_PUBLIC_SUPABASE_ANON_KEY` (see `.env.example`).
+4. Contact-form submissions land in the `leads` table.
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## Still to confirm with the owner
 
-## Learn More
+- Full weekly hours (`lib/site.ts`)
+- Real truck photos and listings (sample data lives in `lib/inventory.ts`)
 
-To learn more about Next.js, take a look at the following resources:
+## Files
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+- `components/Logo.tsx`, `public/logo.svg`, `app/icon.svg` — logo
+- `lib/inventory.ts` — data layer (Supabase REST, falls back to sample data)
+- `lib/lead.ts` — contact-form validation (`npm test`)
