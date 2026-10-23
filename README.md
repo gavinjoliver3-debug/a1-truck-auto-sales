@@ -11,6 +11,10 @@ npm install
 npm run dev
 ```
 
+## Preview on GitHub Pages
+
+https://gavinjoliver3-debug.github.io/a1-truck-auto-sales/ — static copy. Update it after changes with `bash scripts/deploy-pages.sh`.
+
 ## Go live (Supabase + Vercel)
 
 1. Create a Supabase project and run `supabase/schema.sql` in the SQL editor.

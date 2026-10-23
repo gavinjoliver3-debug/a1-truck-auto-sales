@@ -3,10 +3,14 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { LeadForm } from "@/components/LeadForm";
 import { TruckArt } from "@/components/TruckArt";
-import { BODIES, getTruck, money, title } from "@/lib/inventory";
+import { BODIES, getTruck, getTrucks, money, title } from "@/lib/inventory";
 import { site } from "@/lib/site";
 
 type Props = { params: Promise<{ id: string }> };
+
+export async function generateStaticParams() {
+  return (await getTrucks()).map((t) => ({ id: t.id }));
+}
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const truck = await getTruck((await params).id);

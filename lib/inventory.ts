@@ -42,9 +42,9 @@ function rest(path: string, init: RequestInit = {}) {
 
 export const isBody = (v: unknown): v is Body => BODIES.some((b) => b.key === v);
 
-export async function getTrucks(body?: Body): Promise<Truck[]> {
-  if (isDemo) return SAMPLE.filter((t) => !body || t.body === body);
-  const res = await rest(`trucks?status=eq.available&order=created_at.desc${body ? `&body=eq.${body}` : ""}`);
+export async function getTrucks(): Promise<Truck[]> {
+  if (isDemo) return SAMPLE;
+  const res = await rest("trucks?status=eq.available&order=created_at.desc");
   if (!res.ok) throw new Error(`Inventory fetch failed: ${res.status}`);
   return res.json();
 }
