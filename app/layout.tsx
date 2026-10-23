@@ -1,13 +1,20 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { Barlow, Barlow_Condensed, IBM_Plex_Mono } from "next/font/google";
+import { Lexend, Source_Sans_3 } from "next/font/google";
+import { Icon } from "@/components/Icon";
 import { Logo } from "@/components/Logo";
 import { site } from "@/lib/site";
 import "./globals.css";
 
-const barlow = Barlow({ variable: "--font-barlow", subsets: ["latin"], weight: ["400", "500", "600"] });
-const condensed = Barlow_Condensed({ variable: "--font-barlow-condensed", subsets: ["latin"], weight: ["600", "700", "800"] });
-const mono = IBM_Plex_Mono({ variable: "--font-plex-mono", subsets: ["latin"], weight: ["400", "500"] });
+const lexend = Lexend({ variable: "--font-lexend", subsets: ["latin"], weight: ["500", "600"] });
+const source = Source_Sans_3({ variable: "--font-source", subsets: ["latin"], weight: ["400", "500", "600", "700"] });
+
+const NAV = [
+  ["/inventory", "Inventory"],
+  ["/finance", "Finance Now"],
+  ["/about", "About"],
+  ["/contact", "Contact"],
+];
 
 export const metadata: Metadata = {
   title: { default: "A1 Truck & Auto Sales | Used Commercial Trucks in Modesto, CA", template: "%s | A1 Truck & Auto Sales" },
@@ -16,53 +23,76 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en" className={`${barlow.variable} ${condensed.variable} ${mono.variable}`}>
-      <body className="font-sans antialiased">
-        <header className="sticky top-0 z-20 border-b border-white/10 bg-ink/95 backdrop-blur">
-          <nav className="mx-auto flex max-w-6xl items-center justify-between gap-4 px-4 py-3">
+    <html lang="en" className={`${lexend.variable} ${source.variable}`}>
+      <body className="font-sans text-[17px] antialiased">
+        <header className="sticky top-0 z-20 border-b border-line bg-white/95 backdrop-blur">
+          <div className="mx-auto flex max-w-6xl items-center justify-between gap-4 px-4 py-3">
             <Link href="/" aria-label="A1 Truck & Auto Sales home">
-              <Logo light />
+              <Logo />
             </Link>
-            <div className="flex items-center gap-1 sm:gap-6">
-              <Link href="/inventory" className="hidden px-2 py-2 font-semibold text-white/80 hover:text-white sm:block">
-                Inventory
+            <nav aria-label="Main" className="hidden items-center gap-1 md:flex">
+              {NAV.map(([href, label]) => (
+                <Link key={href} href={href} className="rounded-md px-3 py-2 font-semibold text-steel transition-colors hover:bg-panel hover:text-ink">
+                  {label}
+                </Link>
+              ))}
+            </nav>
+            <a href={site.phoneHref} className="inline-flex items-center gap-2 rounded-md bg-signal px-4 py-2.5 font-semibold text-white transition-colors hover:bg-signal-dark">
+              <Icon name="phone" className="size-4" />
+              <span className="hidden sm:inline">{site.phone}</span>
+              <span className="sm:hidden">Call</span>
+            </a>
+          </div>
+          <nav aria-label="Main" className="flex justify-between border-t border-line px-4 md:hidden">
+            {NAV.map(([href, label]) => (
+              <Link key={href} href={href} className="py-3 text-[15px] font-semibold text-steel hover:text-ink">
+                {label}
               </Link>
-              <Link href="/#visit" className="hidden px-2 py-2 font-semibold text-white/80 hover:text-white sm:block">
-                Visit
-              </Link>
-              <a
-                href={site.phoneHref}
-                className="rounded bg-signal px-4 py-2.5 font-display text-lg font-bold tracking-wide text-white transition-colors hover:bg-signal-dark"
-              >
-                {site.phone}
-              </a>
-            </div>
+            ))}
           </nav>
         </header>
 
         <main>{children}</main>
 
-        <footer className="bg-ink text-white/70">
-          <div className="hazard h-2" />
-          <div className="mx-auto grid max-w-6xl gap-8 px-4 py-12 sm:grid-cols-3">
-            <Logo light />
-            <address className="not-italic leading-relaxed">
-              {site.street}
-              <br />
-              {site.city}
-              <br />
-              <a href={site.phoneHref} className="text-white hover:underline">
+        <footer className="bg-ink text-slate-300">
+          <div className="mx-auto grid max-w-6xl gap-10 px-4 py-14 sm:grid-cols-2 lg:grid-cols-4">
+            <div>
+              <Logo light />
+              <p className="mt-4 max-w-xs text-slate-400">Used commercial trucks in Modesto, California.</p>
+            </div>
+            <div>
+              <h2 className="font-display font-semibold text-white">Visit</h2>
+              <address className="mt-3 not-italic leading-relaxed">
+                {site.street}
+                <br />
+                {site.city}
+              </address>
+              <a href={site.mapsUrl} className="mt-2 inline-block font-semibold text-white hover:underline">
+                Get directions
+              </a>
+            </div>
+            <div>
+              <h2 className="font-display font-semibold text-white">Contact</h2>
+              <a href={site.phoneHref} className="mt-3 block text-white hover:underline">
                 {site.phone}
               </a>
-            </address>
-            <ul className="space-y-1">
-              <li><Link href="/inventory" className="hover:text-white">Inventory</Link></li>
-              <li><a href={site.mapsUrl} className="hover:text-white">Directions</a></li>
-              <li><Link href="/#visit" className="hover:text-white">Contact</Link></li>
-            </ul>
+              <p className="mt-1">{site.hours}</p>
+            </div>
+            <div>
+              <h2 className="font-display font-semibold text-white">Pages</h2>
+              <ul className="mt-3 space-y-1.5">
+                {NAV.map(([href, label]) => (
+                  <li key={href}>
+                    <Link href={href} className="hover:text-white">
+                      {label}
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            </div>
           </div>
-          <p className="border-t border-white/10 py-5 text-center text-sm">
-            © {new Date().getFullYear()} {site.name}. Used commercial trucks in Modesto, CA.
+          <p className="border-t border-white/10 py-5 text-center text-sm text-slate-400">
+            © {new Date().getFullYear()} {site.name}
           </p>
         </footer>
       </body>

@@ -1,4 +1,4 @@
-export function LogoMark({ className = "h-9 w-auto" }: { className?: string }) {
+export function LogoMark({ className = "h-8 w-auto" }: { className?: string }) {
   return (
     <svg viewBox="0 0 64 48" className={className} aria-hidden="true">
       <path d="M10 0H64L54 48H0Z" fill="#DC2626" />
@@ -14,11 +14,9 @@ export function Logo({ light = false }: { light?: boolean }) {
   return (
     <span className="flex items-center gap-2.5">
       <LogoMark />
-      <span className={`font-display uppercase leading-none ${light ? "text-white" : "text-ink"}`}>
-        <span className="block text-xl font-extrabold tracking-wide">Truck &amp; Auto</span>
-        <span className={`block text-[11px] font-semibold tracking-[0.3em] ${light ? "text-white/60" : "text-muted"}`}>
-          Sales · Modesto
-        </span>
+      <span className="leading-tight">
+        <span className={`block font-display text-[17px] font-semibold tracking-tight ${light ? "text-white" : "text-ink"}`}>Truck &amp; Auto Sales</span>
+        <span className={`block text-xs font-medium ${light ? "text-slate-400" : "text-muted"}`}>Modesto, California</span>
       </span>
     </span>
   );

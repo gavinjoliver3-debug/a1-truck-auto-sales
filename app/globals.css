@@ -2,26 +2,21 @@
 
 @theme inline {
   --color-ink: #0f172a;
-  --color-ink-2: #1e293b;
   --color-steel: #334155;
-  --color-paper: #f4f2ee;
-  --color-line: #ddd8cf;
-  --color-muted: #57534e;
+  --color-paper: #f8fafc;
+  --color-panel: #eef2f6;
+  --color-line: #e2e8f0;
+  --color-muted: #475569;
   --color-signal: #dc2626;
   --color-signal-dark: #b91c1c;
-  --font-sans: var(--font-barlow);
-  --font-display: var(--font-barlow-condensed);
-  --font-mono: var(--font-plex-mono);
+  --color-go: #047857;
+  --font-sans: var(--font-source);
+  --font-display: var(--font-lexend);
 }
 
 body {
   background: var(--color-paper);
   color: var(--color-ink);
-}
-
-/* Diagonal hazard stripe used as a section divider */
-.hazard {
-  background: repeating-linear-gradient(-45deg, var(--color-signal) 0 14px, var(--color-ink) 14px 28px);
 }
 
 :focus-visible {
@@ -30,12 +25,18 @@ body {
 }
 
 @keyframes rise {
-  from { opacity: 0; transform: translateY(16px); }
+  from { opacity: 0; transform: translateY(12px); }
   to { opacity: 1; transform: none; }
 }
-.rise { animation: rise 0.6s cubic-bezier(0.2, 0.7, 0.2, 1) both; }
+.rise,
+.stagger > * { animation: rise 0.45s cubic-bezier(0.2, 0.7, 0.2, 1) both; }
+.stagger > :nth-child(2) { animation-delay: 60ms; }
+.stagger > :nth-child(3) { animation-delay: 120ms; }
+.stagger > :nth-child(4) { animation-delay: 180ms; }
+.stagger > :nth-child(5) { animation-delay: 240ms; }
+.stagger > :nth-child(n + 6) { animation-delay: 300ms; }
 
 @media (prefers-reduced-motion: reduce) {
-  .rise { animation: none; }
+  .rise, .stagger > * { animation: none; }
   * { transition-duration: 0ms !important; }
 }

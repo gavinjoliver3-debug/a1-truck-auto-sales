@@ -62,6 +62,7 @@ export async function saveLead(lead: Lead) {
   if (!res.ok) throw new Error(`Lead insert failed: ${res.status}`);
 }
 
+export const bodyLabel = (b: Body) => BODIES.find((x) => x.key === b)?.label ?? b;
 export const title = (t: Truck) => `${t.year} ${t.make} ${t.model}`;
 export const money = (n: number | null) => (n == null ? "Call for price" : `$${n.toLocaleString("en-US")}`);
 

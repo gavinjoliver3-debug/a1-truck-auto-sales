@@ -1,0 +1,36 @@
+// Lucide-style line icons, inlined so there is no icon dependency.
+const RING = "M2 12a10 10 0 1 0 20 0a10 10 0 1 0-20 0";
+const PATHS = {
+  phone: ["M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"],
+  pin: ["M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z", "M9 10a3 3 0 1 0 6 0a3 3 0 1 0-6 0"],
+  clock: [RING, "M12 6v6l4 2"],
+  gauge: ["m12 14 4-4", "M3.34 19a10 10 0 1 1 17.32 0"],
+  check: [RING, "m9 12 2 2 4-4"],
+  arrow: ["M5 12h14", "m12 5 7 7-7 7"],
+  back: ["M19 12H5", "m12 19-7-7 7-7"],
+  bolt: ["M13 2 3 14h9l-1 8 10-12h-9l1-8z"],
+  weight: ["M12 7a2 2 0 1 0 0-4 2 2 0 0 0 0 4Z", "M6.5 7h11l3 14h-17Z"],
+  dollar: ["M12 2v20", "M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"],
+  gears: ["M6 4v16", "M12 4v8", "M18 4v6a2 2 0 0 1-2 2H6"],
+  file: ["M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z", "M14 2v4a2 2 0 0 0 2 2h4", "M8 13h8", "M8 17h5"],
+  calendar: ["M3 6a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2Z", "M16 2v4", "M8 2v4", "M3 10h18"],
+  truck: [
+    "M14 18V6a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2v11a1 1 0 0 0 1 1h2",
+    "M15 18H9",
+    "M19 18h2a1 1 0 0 0 1-1v-3.65a1 1 0 0 0-.22-.62L18.3 9.38a1 1 0 0 0-.78-.38H14",
+    "M5 18a2 2 0 1 0 4 0a2 2 0 1 0-4 0",
+    "M15 18a2 2 0 1 0 4 0a2 2 0 1 0-4 0",
+  ],
+};
+
+export type IconName = keyof typeof PATHS;
+
+export function Icon({ name, className = "size-5" }: { name: IconName; className?: string }) {
+  return (
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" className={className} aria-hidden="true">
+      {PATHS[name].map((d) => (
+        <path key={d} d={d} />
+      ))}
+    </svg>
+  );
+}

@@ -3,18 +3,24 @@
 import { useState } from "react";
 import { saveLead } from "@/lib/inventory";
 import { validateLead } from "@/lib/lead";
+import { btn, field } from "@/lib/ui";
 
-const field = "w-full rounded border border-line bg-white px-3 py-2.5 text-base outline-none focus:border-ink";
+const BASE = ["name", "phone", "email", "truck_id"];
 
 // Posts straight to Supabase from the browser so it also works on static hosting (GitHub Pages).
 // The anon key is public by design; RLS only allows inserting leads, and the table enforces lengths.
-export function LeadForm({ truckId, prompt }: { truckId?: string; prompt?: string }) {
+export function LeadForm({ truckId, prompt, children }: { truckId?: string; prompt?: string; children?: React.ReactNode }) {
   const [status, setStatus] = useState<"idle" | "sending" | "sent">("idle");
   const [error, setError] = useState<string>();
 
   async function onSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
-    const { lead, error } = validateLead(Object.fromEntries(new FormData(e.currentTarget)));
+    const { message, ...fields } = Object.fromEntries(new FormData(e.currentTarget)) as Record<string, string>;
+    // Extra fields (e.g. the finance questions) are named by their label and folded into the message.
+    const extras = Object.entries(fields)
+      .filter(([k, v]) => !BASE.includes(k) && v.trim())
+      .map(([k, v]) => `${k}: ${v.trim()}`);
+    const { lead, error } = validateLead({ ...fields, message: [...extras, message].filter(Boolean).join("\n") });
     if (!lead) return setError(error);
     setError(undefined);
     setStatus("sending");
@@ -29,7 +35,7 @@ export function LeadForm({ truckId, prompt }: { truckId?: string; prompt?: strin
 
   if (status === "sent") {
     return (
-      <p role="status" className="rounded border border-line bg-white p-5 font-medium">
+      <p role="status" className="rounded-lg border border-emerald-200 bg-emerald-50 p-5 font-medium text-go">
         Thanks — we got your message and will call you back soon.
       </p>
     );
@@ -54,6 +60,7 @@ export function LeadForm({ truckId, prompt }: { truckId?: string; prompt?: strin
         </span>
         <input name="email" type="email" autoComplete="email" className={field} />
       </label>
+      {children}
       <label className="grid gap-1 text-sm font-semibold">
         Message
         <textarea name="message" rows={4} defaultValue={prompt} className={field} />
@@ -65,7 +72,7 @@ export function LeadForm({ truckId, prompt }: { truckId?: string; prompt?: strin
       )}
       <button
         disabled={status === "sending"}
-        className="cursor-pointer justify-self-start rounded bg-signal px-6 py-3 font-display text-lg font-bold uppercase tracking-wide text-white transition-colors hover:bg-signal-dark disabled:opacity-60"
+        className={`${btn.primary} justify-self-start disabled:opacity-60`}
       >
         {status === "sending" ? "Sending…" : "Send message"}
       </button>
