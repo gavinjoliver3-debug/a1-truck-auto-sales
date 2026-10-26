@@ -115,6 +115,7 @@ function TruckForm({ truck, onSave }: { truck?: AdminTruck; onSave: ReturnType<t
             <Field label="Transmission" name="transmission" defaultValue={truck?.transmission} placeholder="Automatic" />
             <Field label="GVWR" name="gvwr" defaultValue={truck?.gvwr} placeholder="19,500 lb" />
           </div>
+          <Field label="VIN" name="vin" hint="(optional; helps marketplaces match the truck)" maxLength={17} defaultValue={truck?.vin ?? ""} className={`${field} uppercase`} />
           <label className="grid gap-1 text-sm font-semibold">
             Description
             <textarea name="description" rows={4} defaultValue={truck?.description} className={field} />

@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { Icon } from "@/components/Icon";
 import { Logo } from "@/components/Logo";
+import { dealerLd, JsonLd } from "@/lib/seo";
 import { site } from "@/lib/site";
 
 const NAV = [
@@ -13,6 +14,7 @@ const NAV = [
 export default function SiteLayout({ children }: { children: React.ReactNode }) {
   return (
     <>
+      <JsonLd data={dealerLd()} />
         <header className="sticky top-0 z-20 border-b border-line bg-white/95 backdrop-blur">
           <div className="mx-auto flex max-w-6xl items-center justify-between gap-4 px-4 py-3">
             <Link href="/" aria-label="A1 Truck & Auto Sales home">

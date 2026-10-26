@@ -6,6 +6,7 @@ import { LeadForm } from "@/components/LeadForm";
 import { TruckArt } from "@/components/TruckArt";
 import { AvailableBadge } from "@/components/TruckCard";
 import { bodyLabel, getTruck, getTrucks, money, title } from "@/lib/inventory";
+import { breadcrumbLd, JsonLd, truckUrl, vehicleLd } from "@/lib/seo";
 import { site } from "@/lib/site";
 import { btn } from "@/lib/ui";
 
@@ -17,7 +18,14 @@ export async function generateStaticParams() {
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const truck = await getTruck((await params).id);
-  return { title: truck ? title(truck) : "Truck not found" };
+  if (!truck) return { title: "Truck not found" };
+  const description = `${title(truck)} for sale in Modesto, CA. ${money(truck.price)}, ${truck.miles.toLocaleString("en-US")} miles${truck.engine ? `, ${truck.engine}` : ""}${truck.gvwr ? `, ${truck.gvwr} GVWR` : ""}.`;
+  return {
+    title: `${title(truck)} for Sale`,
+    description,
+    alternates: { canonical: truckUrl(truck) },
+    openGraph: { type: "website", url: truckUrl(truck), title: title(truck), description, ...(truck.image_url && { images: [truck.image_url] }) },
+  };
 }
 
 export default async function TruckPage({ params }: Props) {
@@ -31,10 +39,13 @@ export default async function TruckPage({ params }: Props) {
     ["bolt", "Engine", truck.engine],
     ["gears", "Transmission", truck.transmission],
     ["weight", "GVWR", truck.gvwr],
+    ...(truck.vin ? ([["file", "VIN", truck.vin]] as [IconName, string, string][]) : []),
   ];
 
   return (
     <>
+      <JsonLd data={vehicleLd(truck)} />
+      <JsonLd data={breadcrumbLd([["Home", "/"], ["Inventory", "/inventory"], [title(truck), `/inventory/${truck.id}`]])} />
       <div className="border-b border-line bg-white">
         <nav aria-label="Breadcrumb" className="mx-auto flex max-w-6xl items-center gap-2 px-4 py-3 text-[15px] text-muted">
           <Link href="/inventory" className="inline-flex items-center gap-1 font-semibold text-steel hover:text-ink">
@@ -48,7 +59,7 @@ export default async function TruckPage({ params }: Props) {
       </div>
 
       <div className="mx-auto grid max-w-6xl gap-10 px-4 py-10 lg:grid-cols-[1.5fr_1fr]">
-        <div className="rise">
+        <article className="rise">
           <div className="relative aspect-[16/10] overflow-hidden rounded-2xl border border-line bg-panel">
             {truck.image_url ? (
               // eslint-disable-next-line @next/next/no-img-element
@@ -77,7 +88,7 @@ export default async function TruckPage({ params }: Props) {
             <h2 className="font-display text-2xl font-semibold tracking-tight">Description</h2>
             <p className="mt-3 text-lg leading-relaxed text-steel">{truck.description}</p>
           </section>
-        </div>
+        </article>
 
         <aside className="h-fit rounded-2xl border border-line bg-white p-6 lg:sticky lg:top-24">
           <AvailableBadge />

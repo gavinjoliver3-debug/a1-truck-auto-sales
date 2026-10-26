@@ -1,6 +1,7 @@
 // Pure admin logic: types, demo seed, stats, form parsing, CSV. No browser APIs, so it's testable with `npm test`.
 import { isBody, type Truck } from "./inventory.ts";
 import type { Lead, Source } from "./lead.ts";
+import { site } from "./site.ts";
 
 export const TRUCK_STATUSES = ["available", "pending", "sold"] as const;
 export type TruckStatus = (typeof TRUCK_STATUSES)[number];
@@ -17,7 +18,18 @@ export type AdminLead = Lead & { id: string; created_at: string; status: LeadSta
 
 export const SOURCE_LABELS: Record<Source, string> = { truck: "Truck inquiry", finance: "Finance", contact: "General" };
 
-export type Store = { trucks: AdminTruck[]; leads: AdminLead[] };
+export type Settings = { name: string; phone: string; street: string; city: string; hours: string; banner: string; loginEmail: string };
+export const DEFAULT_SETTINGS: Settings = {
+  name: site.name,
+  phone: site.phone,
+  street: site.street,
+  city: site.city,
+  hours: site.hours,
+  banner: "",
+  loginEmail: "",
+};
+
+export type Store = { trucks: AdminTruck[]; leads: AdminLead[]; settings: Settings };
 
 const DAY = 864e5;
 export const daysAgo = (iso: string, now = Date.now()) => Math.max(0, Math.floor((now - Date.parse(iso)) / DAY));
@@ -45,7 +57,7 @@ export function seed(trucks: Truck[], now = Date.now()): Store {
     sold_at: null,
     views: views[i % views.length],
   }));
-  const base = { engine: "", transmission: "Automatic", description: "", image_url: null, featured: false };
+  const base = { engine: "", transmission: "Automatic", description: "", image_url: null, vin: null, featured: false };
   const sold: AdminTruck[] = [
     { ...base, id: "demo-sold-1", year: 2014, make: "Ford", model: "F-450 Flatbed", body: "flatbed", price: 27500, miles: 168000, gvwr: "16,500 lb", status: "sold", created_at: iso(70), sold_at: iso(18), views: 341 },
     { ...base, id: "demo-sold-2", year: 2016, make: "Hino", model: "195 Box Truck", body: "box", price: 38900, miles: 141200, gvwr: "19,500 lb", status: "sold", created_at: iso(55), sold_at: iso(6), views: 266 },
@@ -74,7 +86,7 @@ export function seed(trucks: Truck[], now = Date.now()): Store {
       notes: i === 5 ? "Wants to bring his mechanic Saturday." : "",
     };
   });
-  return { trucks: [...listed, ...sold], leads };
+  return { trucks: [...listed, ...sold], leads, settings: DEFAULT_SETTINGS };
 }
 
 export function stats({ trucks, leads }: Store, now = Date.now()) {
@@ -113,6 +125,8 @@ export function parseTruck(f: Record<string, string>): { truck?: Omit<AdminTruck
   if (!f.miles?.trim() || !Number.isFinite(miles) || miles < 0) return { error: "Enter the miles as a number." };
   if (price !== null && (!Number.isFinite(price) || price < 0)) return { error: "Enter the price as a number, or leave it blank for “Call for price”." };
   if (!isBody(f.body)) return { error: "Pick a body type." };
+  const vin = f.vin?.trim().toUpperCase() || null;
+  if (vin && !/^[A-HJ-NPR-Z0-9]{17}$/.test(vin)) return { error: "A VIN is 17 letters and numbers (no I, O or Q)." };
   const status = TRUCK_STATUSES.find((s) => s === f.status) ?? "available";
   return {
     truck: {
@@ -127,6 +141,7 @@ export function parseTruck(f: Record<string, string>): { truck?: Omit<AdminTruck
       gvwr: f.gvwr?.trim() ?? "",
       description: f.description?.trim() ?? "",
       image_url: f.image_url?.trim() || null,
+      vin,
       featured: f.featured === "on",
       status,
     },
@@ -143,4 +158,12 @@ export function toCsv(rows: Record<string, unknown>[]) {
   if (!rows.length) return "";
   const cols = Object.keys(rows[0]);
   return [cols.join(","), ...rows.map((r) => cols.map((c) => cell(r[c])).join(","))].join("\n");
+}
+
+export function validatePasswordChange(current: string, next: string, confirm: string): string | undefined {
+  if (!current) return "Enter your current password.";
+  if (next.length < 10) return "Use at least 10 characters for the new password.";
+  if (!/[a-z]/i.test(next) || !/\d/.test(next)) return "Use at least one letter and one number.";
+  if (next === current) return "The new password must be different from the current one.";
+  if (next !== confirm) return "The new passwords don't match.";
 }

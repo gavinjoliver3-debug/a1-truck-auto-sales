@@ -5,8 +5,11 @@ import { TruckArt } from "@/components/TruckArt";
 import { TruckCard } from "@/components/TruckCard";
 import { contactRows, Visit } from "@/components/Visit";
 import { BODIES, getTrucks } from "@/lib/inventory";
-import { site } from "@/lib/site";
+import { FAQS, faqLd, JsonLd } from "@/lib/seo";
+import { pageUrl, site } from "@/lib/site";
 import { btn } from "@/lib/ui";
+
+export const metadata = { alternates: { canonical: pageUrl("/") } };
 
 const reasons: [IconName, string, string][] = [
   ["dollar", "Straight pricing", "Most trucks list the asking price right on the page. No games, no hidden e-price."],
@@ -141,6 +144,25 @@ export default async function Home() {
             <a href={site.phoneHref} className={`${btn.secondary} border-white/30 bg-transparent text-white hover:border-white`}>
               <Icon name="phone" className="size-4" /> {site.phone}
             </a>
+          </div>
+        </div>
+      </section>
+
+      {/* FAQ: plain answers for buyers and answer engines */}
+      <section className="border-t border-line bg-white py-20">
+        <JsonLd data={faqLd(FAQS)} />
+        <div className="mx-auto grid max-w-6xl gap-10 px-4 lg:grid-cols-[1fr_1.6fr]">
+          <SectionHeading eyebrow="FAQ" title="Common questions" />
+          <div className="divide-y divide-line border-y border-line">
+            {FAQS.map(([q, a]) => (
+              <details key={q} className="group py-4">
+                <summary className="flex cursor-pointer list-none items-center justify-between gap-4 font-display text-lg font-semibold">
+                  {q}
+                  <Icon name="plus" className="size-5 shrink-0 text-signal transition-transform group-open:rotate-45" />
+                </summary>
+                <p className="mt-3 text-muted">{a}</p>
+              </details>
+            ))}
           </div>
         </div>
       </section>

@@ -9,6 +9,7 @@ const NAV: [string, string, IconName][] = [
   ["/admin", "Dashboard", "home"],
   ["/admin/inventory", "Listings", "truck"],
   ["/admin/leads", "Leads", "inbox"],
+  ["/admin/settings", "Settings", "sliders"],
 ];
 
 export function AdminShell({ children }: { children: React.ReactNode }) {

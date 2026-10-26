@@ -2,11 +2,12 @@ import type { Metadata } from "next";
 import { Icon, type IconName } from "@/components/Icon";
 import { PageHeader } from "@/components/PageHeader";
 import { Visit } from "@/components/Visit";
-import { site } from "@/lib/site";
+import { pageUrl, site } from "@/lib/site";
 
 export const metadata: Metadata = {
   title: "Contact Us",
   description: "Call (209) 857-0195 or visit A1 Truck & Auto Sales at 1400 N 9th St #10, Modesto, CA 95350.",
+  alternates: { canonical: pageUrl("/contact") },
 };
 
 const cards: { icon: IconName; label: string; value: string; href: string; cta: string }[] = [

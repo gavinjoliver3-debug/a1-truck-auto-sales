@@ -4,12 +4,13 @@ import { Icon } from "@/components/Icon";
 import { PageHeader, SectionHeading } from "@/components/PageHeader";
 import { TruckArt } from "@/components/TruckArt";
 import { BODIES } from "@/lib/inventory";
-import { site } from "@/lib/site";
+import { pageUrl, site } from "@/lib/site";
 import { btn } from "@/lib/ui";
 
 export const metadata: Metadata = {
   title: "About",
   description: "A1 Truck & Auto Sales is a used commercial truck dealer on N 9th St in Modesto, California.",
+  alternates: { canonical: pageUrl("/about") },
 };
 
 const steps = [
@@ -36,7 +37,7 @@ export default function About() {
             what we sell: used commercial trucks, listed with the specs that matter and a straight price.
           </p>
           <p>
-            You&apos;ll find us at {site.street}, just off N 9th St. Call ahead and we&apos;ll have the truck you&apos;re interested in pulled up
+            You&apos;ll find us at {site.street} in Modesto. Call ahead and we&apos;ll have the truck you&apos;re interested in pulled up
             and ready to look at.
           </p>
         </div>

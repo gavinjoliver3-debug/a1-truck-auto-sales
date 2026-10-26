@@ -14,6 +14,7 @@ create table trucks (
   gvwr text not null default '',
   description text not null default '',
   image_url text,          -- e.g. a public URL from a Supabase Storage bucket
+  vin text,
   featured boolean not null default false,
   sold_at timestamptz,
   views int not null default 0

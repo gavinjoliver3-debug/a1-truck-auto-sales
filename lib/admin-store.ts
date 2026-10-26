@@ -3,7 +3,7 @@
 // Preview-only data store: everything lives in this browser's localStorage.
 // shortcut: no login and no shared data; swap these functions for Supabase calls (with Supabase Auth) when going live.
 import { useEffect, useState } from "react";
-import { seed, type AdminLead, type Store } from "./admin";
+import { DEFAULT_SETTINGS, seed, type AdminLead, type Store } from "./admin";
 import { SAMPLE } from "./inventory";
 import type { Lead } from "./lead";
 
@@ -12,7 +12,10 @@ const KEY = "a1-admin-demo-v1";
 function read(): Store {
   try {
     const raw = localStorage.getItem(KEY);
-    if (raw) return JSON.parse(raw);
+    if (raw) {
+      const s = JSON.parse(raw);
+      return { ...s, settings: { ...DEFAULT_SETTINGS, ...s.settings } };
+    }
   } catch {}
   return seed(SAMPLE);
 }

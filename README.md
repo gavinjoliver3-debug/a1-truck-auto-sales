@@ -21,6 +21,15 @@ Dashboard (KPIs, leads per week, leads by source, most-viewed listings), listing
 
 **Preview only:** the admin runs on demo data stored in the viewer's browser (`lib/admin-store.ts`) with no login. Leads sent from the public forms land in that browser's demo inbox. Before going live, swap `lib/admin-store.ts` for Supabase calls behind Supabase Auth (the policies are already in `supabase/schema.sql`).
 
+## SEO, AEO and scrapers
+
+Every page is prerendered HTML (on Vercel it's server-rendered), so crawlers and scrapers see the full inventory without running JavaScript.
+
+- `/inventory` carries a schema.org `ItemList` of every truck; each `/inventory/<id>` page carries a `Vehicle` block (brand, model, year, VIN, miles, price, availability, body type using Tru Machinery Market's category names) plus a `Description` section.
+- `/inventory.json` is a JSON feed of every available truck. `/sitemap.xml`, `/robots.txt` (admin blocked) and `/llms.txt` are generated from the same data.
+- The home page has an FAQ with `FAQPage` markup, and every page has a canonical URL.
+- Set `NEXT_PUBLIC_SITE_URL` to the real domain when moving off GitHub Pages; all links, feeds and canonicals follow it.
+
 ## Go live (Supabase + Vercel)
 
 1. Create a Supabase project and run `supabase/schema.sql` in the SQL editor.

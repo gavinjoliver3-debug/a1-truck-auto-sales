@@ -2,12 +2,13 @@ import type { Metadata } from "next";
 import { Icon } from "@/components/Icon";
 import { LeadForm } from "@/components/LeadForm";
 import { PageHeader } from "@/components/PageHeader";
-import { site } from "@/lib/site";
+import { pageUrl, site } from "@/lib/site";
 import { field } from "@/lib/ui";
 
 export const metadata: Metadata = {
   title: "Finance Now",
   description: "Get pre-qualified for financing on a used commercial truck at A1 Truck & Auto Sales in Modesto, CA.",
+  alternates: { canonical: pageUrl("/finance") },
 };
 
 const steps = [

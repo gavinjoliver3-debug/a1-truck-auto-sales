@@ -13,13 +13,16 @@ const SORTS = [
   ["price-desc", "Price: high to low"],
 ];
 
-// Filters and sorts in the browser so the page can be prerendered for static hosting.
-export function InventoryGrid({ trucks }: { trucks: Truck[] }) {
-  const router = useRouter();
+/** Reads ?type= and ?sort= from the URL. Rendered inside <Suspense> whose fallback is the unfiltered grid,
+ *  so the server HTML always lists every truck (search engines and scrapers see the full inventory). */
+export function InventoryGridFromUrl({ trucks }: { trucks: Truck[] }) {
   const params = useSearchParams();
-  const type = params.get("type");
+  return <InventoryGrid trucks={trucks} type={params.get("type")} sort={params.get("sort") ?? ""} />;
+}
+
+export function InventoryGrid({ trucks, type, sort }: { trucks: Truck[]; type: string | null; sort: string }) {
+  const router = useRouter();
   const body = isBody(type) ? type : undefined;
-  const sort = params.get("sort") ?? "";
 
   const href = (t = body as string | undefined, s = sort) => {
     const p = new URLSearchParams();
