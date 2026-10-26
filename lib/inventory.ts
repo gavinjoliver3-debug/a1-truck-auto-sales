@@ -57,7 +57,8 @@ export async function getTruck(id: string): Promise<Truck | null> {
 }
 
 export async function saveLead(lead: Lead) {
-  if (isDemo) return console.log("[demo] lead", lead);
+  // Preview: lands in the admin demo inbox in this browser.
+  if (isDemo) return (await import("./admin-store")).addDemoLead(lead);
   const res = await rest("leads", { method: "POST", body: JSON.stringify(lead), headers: { Prefer: "return=minimal" } });
   if (!res.ok) throw new Error(`Lead insert failed: ${res.status}`);
 }
@@ -67,7 +68,7 @@ export const title = (t: Truck) => `${t.year} ${t.make} ${t.model}`;
 export const money = (n: number | null) => (n == null ? "Call for price" : `$${n.toLocaleString("en-US")}`);
 
 // Placeholder listings shown until Supabase is connected.
-const SAMPLE: Truck[] = [
+export const SAMPLE: Truck[] = [
   { id: "f550-dump", year: 2017, make: "Ford", model: "F-550 XL Dump", body: "dump", price: 48900, miles: 112400, engine: "6.7L Power Stroke V8 Diesel", transmission: "Automatic", gvwr: "19,500 lb", description: "10 ft steel dump bed, 4x4, tow package. Ready for landscaping or site work.", image_url: null, featured: true },
   { id: "npr-box", year: 2019, make: "Isuzu", model: "NPR-HD 16ft Box", body: "box", price: 42500, miles: 98200, engine: "6.0L V8 Gas", transmission: "Automatic", gvwr: "14,500 lb", description: "16 ft dry van with roll-up door and ramp. Cab-over, easy to park in town.", image_url: null, featured: true },
   { id: "f450-service", year: 2016, make: "Ford", model: "F-450 Service Body", body: "service", price: 36900, miles: 134800, engine: "6.8L V10 Gas", transmission: "Automatic", gvwr: "16,500 lb", description: "Utility body with locking compartments and ladder rack.", image_url: null, featured: true },

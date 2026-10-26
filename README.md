@@ -15,6 +15,12 @@ npm run dev
 
 https://gavinjoliver3-debug.github.io/a1-truck-auto-sales/ — static copy. Update it after changes with `bash scripts/deploy-pages.sh`.
 
+## Admin (`/admin`)
+
+Dashboard (KPIs, leads per week, leads by source, most-viewed listings), listings manager (add/edit, status, featured, delete) and a leads inbox (status, notes, CSV export).
+
+**Preview only:** the admin runs on demo data stored in the viewer's browser (`lib/admin-store.ts`) with no login. Leads sent from the public forms land in that browser's demo inbox. Before going live, swap `lib/admin-store.ts` for Supabase calls behind Supabase Auth (the policies are already in `supabase/schema.sql`).
+
 ## Go live (Supabase + Vercel)
 
 1. Create a Supabase project and run `supabase/schema.sql` in the SQL editor.

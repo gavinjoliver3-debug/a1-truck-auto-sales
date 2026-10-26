@@ -72,7 +72,7 @@ export default function Finance() {
             <Icon name="check" className="mt-0.5 size-4 shrink-0 text-go" />
             This isn&apos;t a credit application and won&apos;t affect your credit. Please don&apos;t enter your SSN or bank details here.
           </p>
-          <LeadForm>
+          <LeadForm source="finance">
             <div className="grid gap-4 sm:grid-cols-2">
               <label className="grid gap-1 text-sm font-semibold">
                 <span>

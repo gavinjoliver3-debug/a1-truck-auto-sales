@@ -2,14 +2,14 @@
 
 import { useState } from "react";
 import { saveLead } from "@/lib/inventory";
-import { validateLead } from "@/lib/lead";
+import { validateLead, type Source } from "@/lib/lead";
 import { btn, field } from "@/lib/ui";
 
-const BASE = ["name", "phone", "email", "truck_id"];
+const BASE = ["name", "phone", "email", "truck_id", "source"];
 
 // Posts straight to Supabase from the browser so it also works on static hosting (GitHub Pages).
 // The anon key is public by design; RLS only allows inserting leads, and the table enforces lengths.
-export function LeadForm({ truckId, prompt, children }: { truckId?: string; prompt?: string; children?: React.ReactNode }) {
+export function LeadForm({ truckId, prompt, source = truckId ? "truck" : "contact", children }: { truckId?: string; prompt?: string; source?: Source; children?: React.ReactNode }) {
   const [status, setStatus] = useState<"idle" | "sending" | "sent">("idle");
   const [error, setError] = useState<string>();
 
@@ -44,6 +44,7 @@ export function LeadForm({ truckId, prompt, children }: { truckId?: string; prom
   return (
     <form onSubmit={onSubmit} className="grid gap-4">
       {truckId && <input type="hidden" name="truck_id" value={truckId} />}
+      <input type="hidden" name="source" value={source} />
       <div className="grid gap-4 sm:grid-cols-2">
         <label className="grid gap-1 text-sm font-semibold">
           Name
