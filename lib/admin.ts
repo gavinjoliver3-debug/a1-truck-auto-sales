@@ -5,7 +5,8 @@ import { site } from "./site.ts";
 
 export const TRUCK_STATUSES = ["available", "pending", "sold"] as const;
 export type TruckStatus = (typeof TRUCK_STATUSES)[number];
-export type AdminTruck = Truck & { status: TruckStatus; created_at: string; sold_at: string | null; views: number };
+// photos: the first is the cover (also stored as image_url). Optional so older saved demo data still loads.
+export type AdminTruck = Truck & { status: TruckStatus; created_at: string; sold_at: string | null; views: number; photos?: string[] };
 
 export const LEAD_STATUSES = [
   { key: "new", label: "New" },

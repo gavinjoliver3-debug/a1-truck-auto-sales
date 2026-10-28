@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 import { Suspense, useState } from "react";
 import { AdminHeader, Loading } from "@/components/admin/AdminShell";
+import { PhotoPicker } from "@/components/admin/PhotoPicker";
 import { Icon } from "@/components/Icon";
 import { TruckCard } from "@/components/TruckCard";
 import { parseTruck, TRUCK_STATUSES, type AdminTruck } from "@/lib/admin";
@@ -52,14 +53,16 @@ function TruckForm({ truck, onSave }: { truck?: AdminTruck; onSave: ReturnType<t
   const router = useRouter();
   const [error, setError] = useState<string>();
   const [preview, setPreview] = useState<Truck | undefined>(truck);
+  const [photos, setPhotos] = useState<string[]>(truck?.photos ?? (truck?.image_url ? [truck.image_url] : []));
   const read = (form: HTMLFormElement) => parseTruck(Object.fromEntries(new FormData(form)) as Record<string, string>);
 
   function onSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
-    const { truck: data, error } = read(e.currentTarget);
-    if (!data) return setError(error);
+    const { truck: parsed, error } = read(e.currentTarget);
+    if (!parsed) return setError(error);
+    const data = { ...parsed, photos, image_url: photos[0] ?? null };
     const now = new Date().toISOString();
-    onSave((s) =>
+    const saved = onSave((s) =>
       truck
         ? {
             ...s,
@@ -69,6 +72,7 @@ function TruckForm({ truck, onSave }: { truck?: AdminTruck; onSave: ReturnType<t
           }
         : { ...s, trucks: [{ ...data, id: crypto.randomUUID(), created_at: now, sold_at: data.status === "sold" ? now : null, views: 0 }, ...s.trucks] },
     );
+    if (!saved) return setError("This browser's preview storage is full. Remove a few photos (here or on other trucks) and save again.");
     router.push("/admin/inventory");
   }
 
@@ -120,7 +124,7 @@ function TruckForm({ truck, onSave }: { truck?: AdminTruck; onSave: ReturnType<t
             Description
             <textarea name="description" rows={4} defaultValue={truck?.description} className={field} />
           </label>
-          <Field label="Photo URL" name="image_url" hint="(optional; uploads come with Supabase)" type="url" defaultValue={truck?.image_url ?? ""} placeholder="https://…" />
+          <PhotoPicker photos={photos} onChange={setPhotos} />
           <div className="flex flex-wrap items-end gap-6">
             <label className="grid gap-1 text-sm font-semibold">
               Status
@@ -154,7 +158,7 @@ function TruckForm({ truck, onSave }: { truck?: AdminTruck; onSave: ReturnType<t
           <h2 className="mb-3 text-sm font-semibold uppercase tracking-wider text-muted">Website preview</h2>
           {preview ? (
             <div className="pointer-events-none">
-              <TruckCard truck={preview} />
+              <TruckCard truck={{ ...preview, image_url: photos[0] ?? null }} />
             </div>
           ) : (
             <p className="rounded-xl border border-dashed border-slate-300 bg-white p-8 text-center text-muted">Fill in the form to see the listing card.</p>
