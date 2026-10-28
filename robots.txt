@@ -1,0 +1,5 @@
+User-Agent: *
+Allow: /
+Disallow: /admin
+
+Sitemap: https://gavinjoliver3-debug.github.io/a1-truck-auto-sales/sitemap.xml

@@ -1,0 +1,34 @@
+# A1 Truck & Auto Sales
+
+> Used commercial truck dealer in Modesto, California. 1400 N 9th St #10, Modesto, CA 95350. Phone (209) 857-0195.
+
+## Pages
+- [Inventory](https://gavinjoliver3-debug.github.io/a1-truck-auto-sales/inventory/): every truck for sale, with price and specs
+- [Finance Now](https://gavinjoliver3-debug.github.io/a1-truck-auto-sales/finance/): pre-qualify for truck financing
+- [About](https://gavinjoliver3-debug.github.io/a1-truck-auto-sales/about/)
+- [Contact](https://gavinjoliver3-debug.github.io/a1-truck-auto-sales/contact/)
+- [Inventory feed (JSON)](https://gavinjoliver3-debug.github.io/a1-truck-auto-sales/inventory.json)
+
+## Trucks for sale (6)
+- [2017 Ford F-550 XL Dump](https://gavinjoliver3-debug.github.io/a1-truck-auto-sales/inventory/f550-dump/): Dump, $48,900, 112,400 miles
+- [2019 Isuzu NPR-HD 16ft Box](https://gavinjoliver3-debug.github.io/a1-truck-auto-sales/inventory/npr-box/): Box / Van, $42,500, 98,200 miles
+- [2016 Ford F-450 Service Body](https://gavinjoliver3-debug.github.io/a1-truck-auto-sales/inventory/f450-service/): Service / Utility, $36,900, 134,800 miles
+- [2015 Freightliner M2 106 Flatbed](https://gavinjoliver3-debug.github.io/a1-truck-auto-sales/inventory/m2-flatbed/): Flatbed / Stake, $51,900, 187,300 miles
+- [2018 Ram 5500 Rollback](https://gavinjoliver3-debug.github.io/a1-truck-auto-sales/inventory/ram5500-rollback/): Rollback / Tow, Call for price, 121,500 miles
+- [2020 Chevrolet Silverado 2500HD](https://gavinjoliver3-debug.github.io/a1-truck-auto-sales/inventory/silverado-2500/): Pickups, $34,900, 76,100 miles
+
+## FAQ
+### Where is A1 Truck & Auto Sales?
+1400 N 9th St #10, Modesto, CA 95350. Call ahead and we'll have the truck you want to see ready.
+
+### What kinds of trucks do you sell?
+Used commercial trucks: dump trucks, box trucks, service and utility trucks, flatbeds, rollbacks and tow trucks, and work pickups.
+
+### Do you offer financing?
+Yes. You can pre-qualify online in about two minutes, and it won't affect your credit. We call you to go over options.
+
+### How do I know if a truck is still available?
+Every truck listed on the website is available. Call (209) 857-0195 to confirm and set up a time to see it.
+
+### What are your hours?
+Hours vary, so please call ahead at (209) 857-0195 and we'll have the truck ready when you arrive.
