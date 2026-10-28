@@ -13,7 +13,8 @@ create table trucks (
   transmission text not null default '',
   gvwr text not null default '',
   description text not null default '',
-  image_url text,          -- e.g. a public URL from a Supabase Storage bucket
+  image_url text,          -- cover photo (same as photos[1])
+  photos text[] not null default '{}', -- public URLs in the truck-photos bucket, cover first
   vin text,
   featured boolean not null default false,
   sold_at timestamptz,
@@ -43,3 +44,8 @@ create policy "public submits leads" on leads for insert to anon with check (tru
 -- Admin: staff sign in with Supabase Auth (invite-only) and get full access.
 create policy "staff manage trucks" on trucks for all to authenticated using (true) with check (true);
 create policy "staff manage leads" on leads for all to authenticated using (true) with check (true);
+
+-- Truck photos: public bucket (anyone can view), only signed-in staff can upload or delete.
+insert into storage.buckets (id, name, public) values ('truck-photos', 'truck-photos', true);
+create policy "staff upload truck photos" on storage.objects for insert to authenticated with check (bucket_id = 'truck-photos');
+create policy "staff delete truck photos" on storage.objects for delete to authenticated using (bucket_id = 'truck-photos');

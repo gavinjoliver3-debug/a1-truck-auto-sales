@@ -9,7 +9,7 @@ import { Icon } from "@/components/Icon";
 import { TruckCard } from "@/components/TruckCard";
 import { parseTruck, TRUCK_STATUSES, type AdminTruck } from "@/lib/admin";
 import { useStore } from "@/lib/admin-store";
-import { BODIES, title, type Truck } from "@/lib/inventory";
+import { BODIES, photosOf, title, type Truck } from "@/lib/inventory";
 import { btn, field } from "@/lib/ui";
 
 // Static hosting can't prerender unknown ids, so the truck to edit comes from ?id=.
@@ -53,7 +53,7 @@ function TruckForm({ truck, onSave }: { truck?: AdminTruck; onSave: ReturnType<t
   const router = useRouter();
   const [error, setError] = useState<string>();
   const [preview, setPreview] = useState<Truck | undefined>(truck);
-  const [photos, setPhotos] = useState<string[]>(truck?.photos ?? (truck?.image_url ? [truck.image_url] : []));
+  const [photos, setPhotos] = useState<string[]>(truck ? photosOf(truck) : []);
   const read = (form: HTMLFormElement) => parseTruck(Object.fromEntries(new FormData(form)) as Record<string, string>);
 
   function onSubmit(e: React.FormEvent<HTMLFormElement>) {

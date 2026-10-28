@@ -23,7 +23,8 @@ export type Truck = {
   transmission: string;
   gvwr: string;
   description: string;
-  image_url: string | null;
+  image_url: string | null; // cover photo, same as photos[0]
+  photos: string[];
   vin: string | null;
   featured: boolean;
 };
@@ -67,15 +68,17 @@ export async function saveLead(lead: Lead) {
 // Category names match Tru Machinery Market's truck categories so its scraper maps them 1:1.
 export const bodyCategory = (b: Body) => BODIES.find((x) => x.key === b)?.category ?? "Truck";
 export const bodyLabel = (b: Body) => BODIES.find((x) => x.key === b)?.label ?? b;
+// Older demo data saved before galleries existed only has image_url.
+export const photosOf = (t: Truck) => (t.photos?.length ? t.photos : t.image_url ? [t.image_url] : []);
 export const title = (t: Truck) => `${t.year} ${t.make} ${t.model}`;
 export const money = (n: number | null) => (n == null ? "Call for price" : `$${n.toLocaleString("en-US")}`);
 
 // Placeholder listings shown until Supabase is connected.
 export const SAMPLE: Truck[] = [
-  { id: "f550-dump", year: 2017, make: "Ford", model: "F-550 XL Dump", body: "dump", price: 48900, miles: 112400, engine: "6.7L Power Stroke V8 Diesel", transmission: "Automatic", gvwr: "19,500 lb", description: "10 ft steel dump bed, 4x4, tow package. Ready for landscaping or site work.", image_url: null, vin: null, featured: true },
-  { id: "npr-box", year: 2019, make: "Isuzu", model: "NPR-HD 16ft Box", body: "box", price: 42500, miles: 98200, engine: "6.0L V8 Gas", transmission: "Automatic", gvwr: "14,500 lb", description: "16 ft dry van with roll-up door and ramp. Cab-over, easy to park in town.", image_url: null, vin: null, featured: true },
-  { id: "f450-service", year: 2016, make: "Ford", model: "F-450 Service Body", body: "service", price: 36900, miles: 134800, engine: "6.8L V10 Gas", transmission: "Automatic", gvwr: "16,500 lb", description: "Utility body with locking compartments and ladder rack.", image_url: null, vin: null, featured: true },
-  { id: "m2-flatbed", year: 2015, make: "Freightliner", model: "M2 106 Flatbed", body: "flatbed", price: 51900, miles: 187300, engine: "Cummins ISB 6.7L Diesel", transmission: "Allison Automatic", gvwr: "25,999 lb", description: "24 ft flatbed, non-CDL GVWR, air brakes.", image_url: null, vin: null, featured: false },
-  { id: "ram5500-rollback", year: 2018, make: "Ram", model: "5500 Rollback", body: "tow", price: null, miles: 121500, engine: "6.7L Cummins I6 Diesel", transmission: "Automatic", gvwr: "19,500 lb", description: "19 ft aluminum rollback with wheel lift and winch.", image_url: null, vin: null, featured: false },
-  { id: "silverado-2500", year: 2020, make: "Chevrolet", model: "Silverado 2500HD", body: "pickup", price: 34900, miles: 76100, engine: "6.6L V8 Gas", transmission: "Automatic", gvwr: "10,000 lb", description: "Long bed work truck, 4x4, spray-in liner.", image_url: null, vin: null, featured: false },
+  { id: "f550-dump", year: 2017, make: "Ford", model: "F-550 XL Dump", body: "dump", price: 48900, miles: 112400, engine: "6.7L Power Stroke V8 Diesel", transmission: "Automatic", gvwr: "19,500 lb", description: "10 ft steel dump bed, 4x4, tow package. Ready for landscaping or site work.", image_url: null, photos: [], vin: null, featured: true },
+  { id: "npr-box", year: 2019, make: "Isuzu", model: "NPR-HD 16ft Box", body: "box", price: 42500, miles: 98200, engine: "6.0L V8 Gas", transmission: "Automatic", gvwr: "14,500 lb", description: "16 ft dry van with roll-up door and ramp. Cab-over, easy to park in town.", image_url: null, photos: [], vin: null, featured: true },
+  { id: "f450-service", year: 2016, make: "Ford", model: "F-450 Service Body", body: "service", price: 36900, miles: 134800, engine: "6.8L V10 Gas", transmission: "Automatic", gvwr: "16,500 lb", description: "Utility body with locking compartments and ladder rack.", image_url: null, photos: [], vin: null, featured: true },
+  { id: "m2-flatbed", year: 2015, make: "Freightliner", model: "M2 106 Flatbed", body: "flatbed", price: 51900, miles: 187300, engine: "Cummins ISB 6.7L Diesel", transmission: "Allison Automatic", gvwr: "25,999 lb", description: "24 ft flatbed, non-CDL GVWR, air brakes.", image_url: null, photos: [], vin: null, featured: false },
+  { id: "ram5500-rollback", year: 2018, make: "Ram", model: "5500 Rollback", body: "tow", price: null, miles: 121500, engine: "6.7L Cummins I6 Diesel", transmission: "Automatic", gvwr: "19,500 lb", description: "19 ft aluminum rollback with wheel lift and winch.", image_url: null, photos: [], vin: null, featured: false },
+  { id: "silverado-2500", year: 2020, make: "Chevrolet", model: "Silverado 2500HD", body: "pickup", price: 34900, miles: 76100, engine: "6.6L V8 Gas", transmission: "Automatic", gvwr: "10,000 lb", description: "Long bed work truck, 4x4, spray-in liner.", image_url: null, photos: [], vin: null, featured: false },
 ];

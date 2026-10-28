@@ -1,4 +1,4 @@
-import { bodyCategory, bodyLabel, getTrucks, title } from "@/lib/inventory";
+import { bodyCategory, bodyLabel, getTrucks, photosOf, title } from "@/lib/inventory";
 import { truckUrl } from "@/lib/seo";
 import { abs, site } from "@/lib/site";
 
@@ -29,7 +29,7 @@ export async function GET() {
       transmission: t.transmission || null,
       gvwr: t.gvwr || null,
       description: t.description,
-      images: t.image_url ? [t.image_url] : [],
+      images: photosOf(t),
       condition: "Used",
       availability: "Available",
     })),

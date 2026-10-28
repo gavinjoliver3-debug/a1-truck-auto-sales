@@ -5,7 +5,7 @@ import { Icon, type IconName } from "@/components/Icon";
 import { LeadForm } from "@/components/LeadForm";
 import { TruckArt } from "@/components/TruckArt";
 import { AvailableBadge } from "@/components/TruckCard";
-import { bodyLabel, getTruck, getTrucks, money, title } from "@/lib/inventory";
+import { bodyLabel, getTruck, getTrucks, money, photosOf, title } from "@/lib/inventory";
 import { breadcrumbLd, JsonLd, truckUrl, vehicleLd } from "@/lib/seo";
 import { site } from "@/lib/site";
 import { btn } from "@/lib/ui";
@@ -24,13 +24,14 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     title: `${title(truck)} for Sale`,
     description,
     alternates: { canonical: truckUrl(truck) },
-    openGraph: { type: "website", url: truckUrl(truck), title: title(truck), description, ...(truck.image_url && { images: [truck.image_url] }) },
+    openGraph: { type: "website", url: truckUrl(truck), title: title(truck), description, ...(photosOf(truck).length && { images: photosOf(truck).slice(0, 4) }) },
   };
 }
 
 export default async function TruckPage({ params }: Props) {
   const truck = await getTruck((await params).id);
   if (!truck) notFound();
+  const photos = photosOf(truck);
 
   const specs: [IconName, string, string][] = [
     ["calendar", "Year", String(truck.year)],
@@ -61,13 +62,26 @@ export default async function TruckPage({ params }: Props) {
       <div className="mx-auto grid max-w-6xl gap-10 px-4 py-10 lg:grid-cols-[1.5fr_1fr]">
         <article className="rise">
           <div className="relative aspect-[16/10] overflow-hidden rounded-2xl border border-line bg-panel">
-            {truck.image_url ? (
+            {photos[0] ? (
               // eslint-disable-next-line @next/next/no-img-element
-              <img src={truck.image_url} alt={title(truck)} className="h-full w-full object-cover" />
+              <img src={photos[0]} alt={title(truck)} className="h-full w-full object-cover" />
             ) : (
               <TruckArt body={truck.body} className="absolute inset-x-10 bottom-8 text-slate-400" />
             )}
           </div>
+          {photos.length > 1 && (
+            <ul className="mt-3 grid grid-cols-3 gap-3 sm:grid-cols-4">
+              {photos.slice(1).map((src, i) => (
+                <li key={src}>
+                  {/* Plain links keep the gallery JavaScript-free; each opens the full photo. */}
+                  <a href={src} target="_blank" rel="noreferrer" className="block aspect-[4/3] overflow-hidden rounded-lg border border-line bg-panel hover:border-ink">
+                    {/* eslint-disable-next-line @next/next/no-img-element */}
+                    <img src={src} alt={`${title(truck)}, photo ${i + 2}`} loading="lazy" className="h-full w-full object-cover" />
+                  </a>
+                </li>
+              ))}
+            </ul>
+          )}
 
           <section className="mt-10">
             <h2 className="font-display text-2xl font-semibold tracking-tight">Specifications</h2>

@@ -1,6 +1,6 @@
 // schema.org JSON-LD for search engines, answer engines and inventory scrapers (e.g. Tru Machinery Market,
 // which reads the ItemList on /inventory and the Vehicle block on each truck page).
-import { bodyCategory, title, type Truck } from "./inventory";
+import { bodyCategory, photosOf, title, type Truck } from "./inventory";
 import { abs, pageUrl, site } from "./site";
 
 const DEALER_ID = abs("/#dealer");
@@ -54,7 +54,7 @@ export function vehicleLd(t: Truck) {
     ...(t.vin && { vehicleIdentificationNumber: t.vin }),
     ...(t.engine && { vehicleEngine: { "@type": "EngineSpecification", name: t.engine } }),
     ...(t.transmission && { vehicleTransmission: t.transmission }),
-    ...(t.image_url && { image: [t.image_url] }),
+    ...(photosOf(t).length && { image: photosOf(t) }),
     additionalProperty: extra,
     offers: {
       "@type": "Offer",

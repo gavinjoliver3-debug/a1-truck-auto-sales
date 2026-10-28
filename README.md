@@ -19,6 +19,8 @@ https://gavinjoliver3-debug.github.io/a1-truck-auto-sales/ — static copy. Upda
 
 Dashboard (KPIs, leads per week, leads by source, most-viewed listings), listings manager (add/edit, status, featured, delete) and a leads inbox (status, notes, CSV export).
 
+**Photos:** up to 40 per truck, uploaded from any device (shrunk to 1280px JPEGs, first is the cover). They're stored by `storePhoto()` in `lib/admin-store.ts`; in the preview that's browser storage, and going live it uploads to the `truck-photos` Supabase Storage bucket (created with its policies in `supabase/schema.sql`). Truck pages show the full gallery, and every photo goes into the Vehicle markup and the JSON feed.
+
 **Preview only:** the admin runs on demo data stored in the viewer's browser (`lib/admin-store.ts`) with no login. Leads sent from the public forms land in that browser's demo inbox. Before going live, swap `lib/admin-store.ts` for Supabase calls behind Supabase Auth (the policies are already in `supabase/schema.sql`).
 
 ## SEO, AEO and scrapers

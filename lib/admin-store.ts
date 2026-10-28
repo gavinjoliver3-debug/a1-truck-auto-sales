@@ -30,6 +30,19 @@ function write(s: Store) {
   }
 }
 
+/** Stores one shrunk photo and returns the URL to save on the truck.
+ *  shortcut: the preview keeps it as a data URL in this browser. When Supabase is connected, upload the blob to the
+ *  "truck-photos" bucket instead (supabase.storage.from("truck-photos").upload(`${crypto.randomUUID()}.jpg`, blob))
+ *  and return its public URL; no other code changes. The bucket and its policies are in supabase/schema.sql. */
+export function storePhoto(blob: Blob): Promise<string> {
+  return new Promise((ok, fail) => {
+    const r = new FileReader();
+    r.onload = () => ok(r.result as string);
+    r.onerror = () => fail(r.error);
+    r.readAsDataURL(blob);
+  });
+}
+
 export function addDemoLead(lead: Lead) {
   const s = read();
   const row: AdminLead = { ...lead, id: crypto.randomUUID(), created_at: new Date().toISOString(), status: "new", notes: "" };

@@ -5,8 +5,7 @@ import { site } from "./site.ts";
 
 export const TRUCK_STATUSES = ["available", "pending", "sold"] as const;
 export type TruckStatus = (typeof TRUCK_STATUSES)[number];
-// photos: the first is the cover (also stored as image_url). Optional so older saved demo data still loads.
-export type AdminTruck = Truck & { status: TruckStatus; created_at: string; sold_at: string | null; views: number; photos?: string[] };
+export type AdminTruck = Truck & { status: TruckStatus; created_at: string; sold_at: string | null; views: number };
 
 export const LEAD_STATUSES = [
   { key: "new", label: "New" },
@@ -58,7 +57,7 @@ export function seed(trucks: Truck[], now = Date.now()): Store {
     sold_at: null,
     views: views[i % views.length],
   }));
-  const base = { engine: "", transmission: "Automatic", description: "", image_url: null, vin: null, featured: false };
+  const base = { engine: "", transmission: "Automatic", description: "", image_url: null, photos: [], vin: null, featured: false };
   const sold: AdminTruck[] = [
     { ...base, id: "demo-sold-1", year: 2014, make: "Ford", model: "F-450 Flatbed", body: "flatbed", price: 27500, miles: 168000, gvwr: "16,500 lb", status: "sold", created_at: iso(70), sold_at: iso(18), views: 341 },
     { ...base, id: "demo-sold-2", year: 2016, make: "Hino", model: "195 Box Truck", body: "box", price: 38900, miles: 141200, gvwr: "19,500 lb", status: "sold", created_at: iso(55), sold_at: iso(6), views: 266 },
@@ -142,6 +141,7 @@ export function parseTruck(f: Record<string, string>): { truck?: Omit<AdminTruck
       gvwr: f.gvwr?.trim() ?? "",
       description: f.description?.trim() ?? "",
       image_url: f.image_url?.trim() || null,
+      photos: [],
       vin,
       featured: f.featured === "on",
       status,
